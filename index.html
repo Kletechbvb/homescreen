@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web App</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        header {
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        header p {
+            color: gray;
+        }
+
+        .setup {
+            margin-bottom: 3px;
+        }
+
+        .setup iframe {
+            width: 100%;
+            height: 300px; /* Adjust the height as needed */
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .connection {
+            background: #460c29;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .connection p {
+            margin: 5px 0;
+        }
+
+        .connection a {
+            color: #9b00ff;
+            text-decoration: none;
+        }
+
+        .overview {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .overview h2 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-item {
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .progress-item p {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .progress-item .label {
+            margin-left: 10px;
+        }
+
+        .circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .circle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60%;
+            height: 60%;
+            background: #000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .isa1 .circle {
+            background: conic-gradient(#00ff00 0% 100%, #303030 100%);
+        }
+
+        .isa2 .circle,
+        .esa .circle {
+            background: conic-gradient(#303030 0% 100%, #303030 100%);
+        }
+
+        .score-board {
+            background: #4e1c80;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .score-board h2 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .message {
+            background: #460c29;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* Signup page styles */
+        .signup-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signup-box {
+            text-align: center;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        .signup-box h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .signup-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .signup-box button {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(to right, #4e1c80, #9b00ff);
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Hide main content initially */
+        .main-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container" id="signup-container">
+        <div class="signup-box">
+            <h1>Hello There, Welcome to Kle.tech</h1>
+            <input type="text" id="name" placeholder="Enter your name" required>
+            <input type="text" id="division" placeholder="Enter your division" required>
+            <button onclick="launch()">Launch</button>
+        </div>
+    </div>
+
+    <div class="container main-content" id="main-content">
+        <header>
+            <h1 id="welcome-message"></h1>
+            <p id="last-visit-message"></p>
+        </header>
+
+        <section class="setup">
+            <iframe src="https://kletechbvb.github.io/timeO/" title="Today's Class Schedule"></iframe>
+        </section>
+        <section class="connection">
+            <a href="#">Notice Board</a>
+            <p>ColorFit Macro</p>
+            <p>Trying to connect...</p>
+        </section>
+        <section class="overview">
+            <h2>Time left</h2>
+            <div class="progress">
+                <div class="progress-item isa1">
+                    <div class="circle"></div>
+                    <p><span class="label">ISA 1</span></p>
+                    <p>COMPLETED</p>
+                </div>
+                <div class="progress-item isa2">
+                    <div class="circle" id="isa2-circle"></div>
+                    <p><span class="label">ISA 2</span></p>
+                    <p id="isa2-status">8 days left</p>
+                </div>
+                <div class="progress-item esa">
+                    <div class="circle" id="esa-circle"></div>
+                    <p><span class="label">ESA</span></p>
+                    <p id="esa-status">30 days left</p>
+                </div>
+            </div>
+        </section>
+        <section class="score-board">
+            <h2>Upcoming Event</h2>
+            <p class="message">I have to updates message by webview</p>
+        </section>
+    </div>
+
+    <script>
+        function launch() {
+            const name = document.getElementById('name').value;
+            const division = document.getElementById('division').value;
+            if (name && division) {
+                localStorage.setItem('userName', name);
+                localStorage.setItem('userDivision', division);
+                showMainContent();
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+
+        function showMainContent() {
+            document.getElementById('signup-container').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('welcome-message').textContent = `Hi, ${localStorage.getItem('userName')}`;
+            displayLastVisitMessage();
+            updateDaysLeft();
+        }
+
+        function updateDaysLeft() {
+            const isa2Status = document.getElementById('isa2-status');
+            const esaStatus = document.getElementById('esa-status');
+            const isa2Circle = document.getElementById('isa2-circle');
+            const esaCircle = document.getElementById('esa-circle');
+
+            const isa2DaysLeft = 8;
+            const esaDaysLeft = 30;
+
+            function calculateDaysRemaining(targetDate) {
+                const currentDate = new Date();
+                const timeDifference = targetDate - currentDate;
+                return Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+            }
+
+            const currentDate = new Date();
+            const isa2TargetDate = new Date(currentDate);
+            isa2TargetDate.setDate(currentDate.getDate() + isa2DaysLeft);
+            const esaTargetDate = new Date(currentDate);
+            esaTargetDate.setDate(currentDate.getDate() + esaDaysLeft);
+
+            const isa2DaysRemaining = calculateDaysRemaining(isa2TargetDate);
+            const esaDaysRemaining = calculateDaysRemaining(esaTargetDate);
+
+            isa2Status.textContent = `${isa2DaysRemaining} days left`;
+            esaStatus.textContent = `${esaDaysRemaining} days left`;
+
+            updateCircle(isa2Circle, isa2DaysRemaining, isa2DaysLeft);
+            updateCircle(esaCircle, esaDaysRemaining, esaDaysLeft);
+        }
+
+        function updateCircle(element, daysRemaining, totalDays) {
+            const percentage = ((totalDays - daysRemaining) / totalDays) * 100;
+            let color;
+            if (daysRemaining === 0) {
+                color = '#808080';
+            } else if (daysRemaining <= 7) {
+                color = '#ff0000';
+            } else if (daysRemaining <= 14) {
+                color = '#ffbf00';
+            } else {
+                color = '#00ff00';
+            }
+            element.style.background = `conic-gradient(${color} ${percentage}%, #303030 ${percentage}% 100%)`;
+        }
+
+        function displayLastVisitMessage() {
+            const lastVisitMessage = document.getElementById('last-visit-message');
+            const lastVisit = localStorage.getItem('lastVisit');
+            if (lastVisit) {
+                const currentTime = new Date().getTime();
+                const timeDifference = currentTime - lastVisit;
+                const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
+                const daysDifference = Math.floor(hoursDifference / 24);
+
+                if (daysDifference > 0) {
+                    lastVisitMessage.textContent = `Nice to see you again after ${daysDifference} day(s)`;
+                } else {
+                    lastVisitMessage.textContent = `Nice to see you again after ${hoursDifference} hour(s)`;
+                }
+            }
+            localStorage.setItem('lastVisit', new Date().getTime());
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const userName = localStorage.getItem('userName');
+            const userDivision = localStorage.getItem('userDivision');
+            if (userName && userDivision) {
+                showMainContent();
+            }
+        });
+    </script>
+</body>
+</html>
